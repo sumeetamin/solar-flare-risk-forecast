@@ -4,7 +4,7 @@ An end-to-end, reproducible multi-output regression baseline for estimating the 
 
 ## Scope and limitations
 
-This uses UCI's 1,389-row Solar Flare dataset, which contains active-region descriptors and three next-24-hour flare-count targets. The source has no timestamps, so the evaluation is a stratified random holdout rather than a time-based forecast test. It is a research/learning benchmark and must not be used for operational space-weather warnings.
+This uses UCI's 1,389-row Solar Flare dataset, which contains active-region descriptors and three next-24-hour flare-count targets. The source has no timestamps, so the evaluation is a random holdout rather than a time-based forecast test. It is a research/learning benchmark and must not be used for operational space-weather warnings.
 
 ## Run
 
@@ -15,7 +15,7 @@ pip install -r requirements.txt
 python main.py --output-dir artifacts
 ```
 
-The script downloads the dataset through `ucimlrepo`, reports per-target MAE, median absolute error, and R², and writes holdout predictions, metrics, feature importances, and a fitted model under `artifacts/`.
+The script downloads the dataset through `ucimlrepo`, reports per-target MAE, median absolute error, and R², and writes holdout predictions, metrics, transformed-feature importances, and a fitted model under `artifacts/`.
 
 ## Data and attribution
 
