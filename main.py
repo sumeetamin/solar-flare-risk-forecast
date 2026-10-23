@@ -99,6 +99,11 @@ def train(output_dir: Path) -> dict[str, object]:
         pred[f"actual_{target}"] = y_test[target].to_numpy()
     pred.to_csv(output_dir / "holdout_predictions.csv", index=False)
     (output_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    feature_names = model.named_steps["preprocess"].get_feature_names_out()
+    importances = model.named_steps["regressor"].feature_importances_
+    pd.DataFrame({"feature": feature_names, "importance": importances}).sort_values(
+        "importance", ascending=False
+    ).to_csv(output_dir / "feature_importances.csv", index=False)
     joblib.dump(model, output_dir / "model.joblib")
     return metrics
 
