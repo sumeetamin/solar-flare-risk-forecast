@@ -13,6 +13,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.dummy import DummyRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, median_absolute_error, r2_score
@@ -74,6 +75,22 @@ def train(output_dir: Path) -> dict[str, object]:
     )
     model.fit(X_train, y_train)
     prediction = np.clip(model.predict(X_test), 0, None)
+    mean_baseline = DummyRegressor(strategy="mean").fit(X_train, y_train)
+    mean_prediction = np.clip(mean_baseline.predict(X_test), 0, None)
+    zero_prediction = np.zeros_like(y_test.to_numpy(dtype=float))
+
+    def score_per_target(values: np.ndarray) -> dict[str, dict[str, float]]:
+        return {
+            target: {
+                "mae": float(mean_absolute_error(y_test[target], values[:, i])),
+                "median_absolute_error": float(
+                    median_absolute_error(y_test[target], values[:, i])
+                ),
+                "r2": float(r2_score(y_test[target], values[:, i])),
+            }
+            for i, target in enumerate(y.columns)
+        }
+
     metrics = {
         "dataset": "UCI Solar Flare (id 89)",
         "rows": int(len(X)),
@@ -81,20 +98,23 @@ def train(output_dir: Path) -> dict[str, object]:
         "targets": list(y.columns),
         "split": "random 75/25 holdout; seed=42; no timestamps available",
         "model": "RandomForestRegressor(n_estimators=500, min_samples_leaf=2)",
-        "per_target": {
-            target: {
-                "mae": float(mean_absolute_error(y_test[target], prediction[:, i])),
-                "median_absolute_error": float(
-                    median_absolute_error(y_test[target], prediction[:, i])
-                ),
-                "r2": float(r2_score(y_test[target], prediction[:, i])),
-            }
-            for i, target in enumerate(y.columns)
+        "per_target": score_per_target(prediction),
+        "baselines": {
+            "training_mean": score_per_target(mean_prediction),
+            "all_zero_count": score_per_target(zero_prediction),
         },
         "warning": "Research benchmark only; random holdout is not temporal validation or operational forecast skill.",
     }
     output_dir.mkdir(parents=True, exist_ok=True)
     pred = pd.DataFrame(prediction, columns=[f"predicted_{c}" for c in y.columns])
+    pred = pd.concat(
+        [
+            pred,
+            pd.DataFrame(mean_prediction, columns=[f"mean_baseline_{c}" for c in y.columns]),
+            pd.DataFrame(zero_prediction, columns=[f"zero_baseline_{c}" for c in y.columns]),
+        ],
+        axis=1,
+    )
     for target in y.columns:
         pred[f"actual_{target}"] = y_test[target].to_numpy()
     pred.to_csv(output_dir / "holdout_predictions.csv", index=False)
@@ -118,4 +138,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

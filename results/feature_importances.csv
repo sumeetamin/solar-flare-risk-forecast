@@ -1,0 +1,24 @@
+feature,importance
+categorical__modified Zurich class_E,0.21599048606814508
+numeric__evolution,0.10629410325477263
+numeric__activity,0.08721512111190181
+numeric__area of largest spot,0.08034786981179325
+numeric__previous 24 hour flare activity,0.07145016202153509
+numeric__historically-complex,0.06667893310540683
+categorical__largest spot size_K,0.06397466320422458
+categorical__spot distribution_I,0.05256388042690372
+categorical__largest spot size_A,0.04682161206095412
+categorical__modified Zurich class_D,0.042298831896597784
+categorical__largest spot size_S,0.03486744561437016
+categorical__spot distribution_C,0.030889465509656298
+numeric__area,0.02345038189355552
+categorical__spot distribution_O,0.023097175256179662
+categorical__modified Zurich class_F,0.01666211827133754
+categorical__modified Zurich class_C,0.010753929896409973
+categorical__largest spot size_R,0.010364104288001994
+categorical__largest spot size_H,0.007872157975078982
+numeric__became complex on this pass,0.001959466327317309
+categorical__largest spot size_X,0.0017176556952348866
+categorical__modified Zurich class_B,0.0016096882027449393
+categorical__spot distribution_X,0.0015891158737520268
+categorical__modified Zurich class_H,0.0015316322341259452

@@ -1,0 +1,77 @@
+{
+  "dataset": "UCI Solar Flare (id 89)",
+  "rows": 1389,
+  "features": [
+    "modified Zurich class",
+    "largest spot size",
+    "spot distribution",
+    "activity",
+    "evolution",
+    "previous 24 hour flare activity",
+    "historically-complex",
+    "became complex on this pass",
+    "area",
+    "area of largest spot"
+  ],
+  "targets": [
+    "common flares",
+    "moderate flares",
+    "severe flares"
+  ],
+  "split": "random 75/25 holdout; seed=42; no timestamps available",
+  "model": "RandomForestRegressor(n_estimators=500, min_samples_leaf=2)",
+  "per_target": {
+    "common flares": {
+      "mae": 0.4343659220325691,
+      "median_absolute_error": 0.13512439907203996,
+      "r2": -0.2883765530202953
+    },
+    "moderate flares": {
+      "mae": 0.11001488130118847,
+      "median_absolute_error": 0.006337559744177391,
+      "r2": -0.29991971635747183
+    },
+    "severe flares": {
+      "mae": 0.02257938756583934,
+      "median_absolute_error": 0.0,
+      "r2": 0.004608089145464733
+    }
+  },
+  "baselines": {
+    "training_mean": {
+      "common flares": {
+        "mae": 0.42621484646725627,
+        "median_absolute_error": 0.2680115273775216,
+        "r2": -0.0015075828010320258
+      },
+      "moderate flares": {
+        "mae": 0.11960482294875617,
+        "median_absolute_error": 0.07204610951008646,
+        "r2": -0.004823988480441743
+      },
+      "severe flares": {
+        "mae": 0.02183190345269248,
+        "median_absolute_error": 0.007684918347742555,
+        "r2": -0.0031537262682941325
+      }
+    },
+    "all_zero_count": {
+      "common flares": {
+        "mae": 0.2413793103448276,
+        "median_absolute_error": 0.0,
+        "r2": -0.12384161752316758
+      },
+      "moderate flares": {
+        "mae": 0.05459770114942529,
+        "median_absolute_error": 0.0,
+        "r2": -0.04723276200444859
+      },
+      "severe flares": {
+        "mae": 0.014367816091954023,
+        "median_absolute_error": 0.0,
+        "r2": -0.014577259475218263
+      }
+    }
+  },
+  "warning": "Research benchmark only; random holdout is not temporal validation or operational forecast skill."
+}
